@@ -18,25 +18,41 @@ app.get("/", (req, res) => {
     res.render("index", {todos})
 })
 
+app.get("/new", (req, res) => {
+    res.render("new")
+})
+
+
+app.get("/ano", (req, res) => {
+    res.render("another")
+})
 
 app.post("/add",(req, res) => {
-  const toDo = req.body.todo;
+  const toDo = req.body;
   todos.push(toDo)
   console.log(todos);
   res.redirect('/')
 })
 
+
 app.post("/delete", (req, res) => {
-    const indexToDelete = parseInt(req.body.index)
-    todos.splice(indexToDelete, 1)
-    res.redirect("/")
-})
+    const indexToDelete = parseInt(req.body.index);
+    todos.splice(indexToDelete, 1);
+    res.redirect("/");
+});
 
 
 app.post("/edit", (req, res) => {
-    const index = parseInt(req.body.index)
-    const newValue = req.body.newValue
-    todos[index] = newValue
-    res.redirect("/")
-})
+    const index = parseInt(req.body.index);
+    const newTitle = req.body.newTitle;
+    const newDescription = req.body.newDescription;
+
+
+    todos[index] = {
+        title: newTitle,
+        description: newDescription
+    };
+
+    res.redirect("/");
+});
 

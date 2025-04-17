@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TO-Do</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TO-Do</title>
 </head>
 <body>
-    <h1>Hello, This is To-do List</h1>
-    <form action="/add" method="post">
-        <input type="text" placeholder="enter to do" name="todo">
-        <button type="submit">Add</button>
-       </form>
+  <h1>Hello, This is To-do List</h1>
+  <form action="/add" method="post">
+    <input type="text" placeholder="Enter title" name="title" required>
+    <input type="text" placeholder="Enter description" name="description" required>
+    <button type="submit">Add</button>
+  </form>
 
-       <ul>
-        <% if (todos.length === 0) { %>
-          <li>No tasks yet</li>
-        <% } else { %>
-          <% todos.forEach((todo, index) => { %>
-            <li><%= todo %>
-            <form action="/delete" method="post">
-             <input type="hidden" name="index" value="<%= index %>">
-             <button type="submit">Delete</button>
-            </form>
-  
-            <button onclick="editTodo('<%= index %>', '<%= todo %>')">Edit</button>
-         
-            </li>
-          <% }) %>
-        <% } %>
-      </ul>
+  <ul>
+    <% if (todos.length === 0) { %>
+      <li>No tasks yet</li>
+    <% } else { %>
+      <% todos.forEach((todo, index) => { %>
+        <li>
+          <h1><%= todo.title %></h1>
+          <p><%= todo.description %></p>
+          <form action="/delete" method="post" style="display:inline;">
+            <input type="hidden" name="index" value="<%= index %>">
+            <button type="submit">Delete</button>
+          </form>
+          <button onclick="editTodo('<%= index %>', '<%= todo.title %>', '<%= todo.description %>')">Edit</button>
+        </li>
+      <% }) %>
+    <% } %>
+  </ul>
 
+  <form id="editForm" action="/edit" method="post">
+    <input type="hidden" name="index" id="editIndex">
+    <input type="hidden" name="newTitle" id="editTitle">
+    <input type="hidden" name="newDescription" id="editDescription">
+  </form>
 
-      <form id="editForm" action="/edit" method="post">
-        <input type="hidden" name="index" id="editIndex">
-        <input type="hidden" name="newValue" id="editValue">
-       </form>
+  <script>
+    function editTodo(index, title, description) {
+      let newTitle = prompt("Edit title", title);
+      if (newTitle === null) return;
+      let newDescription = prompt("Edit description", description);
+      if (newDescription === null) return;
+
+      document.getElementById("editIndex").value = index;
+      document.getElementById("editTitle").value = newTitle;
+      document.getElementById("editDescription").value = newDescription;
+      document.getElementById("editForm").submit();
+    }
+  </script>
 </body>
 </html>
-
-<script>
-    function editTodo(index, todo) {
-        let newValue = prompt("type here", todo)
-        document.getElementById("editIndex").value = index;
-        document.getElementById("editValue").value = newValue;
-        document.getElementById("editForm").submit();
-    }
-</script>
